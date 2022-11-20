@@ -1,0 +1,21 @@
+#######################################
+# Syntax Coloring Map ESPAutoWifi
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ESPAutoWifi	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+checkCredentials	KEYWORD2
+checkConnection 	KEYWORD2
+reset	            KEYWORD2
+autoConnect     	KEYWORD2
+connect         	KEYWORD2
+
+#######################################
