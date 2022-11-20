@@ -1,18 +1,18 @@
-#include "ESP32ChipID.h"
+#include <ESPAutoWifi.h>
 
-ESP32ChipID esp;
+ESPAutoWifi wf;
 
 void setup() {
-  esp.begin();
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+
+  // uncomment below for testing
+  // wf.reset();
+
+  //starting autoconnect wifi system
+  wf.autoConnect();
 }
 
 void loop() {
-	Serial.printf("ESP32 Chip model = %s Rev %d\n", ESP.getChipModel(), ESP.getChipRevision());
-	Serial.printf("This chip has %d cores\n", ESP.getChipCores());
-  Serial.print("Chip ID 64 bit: "); Serial.println(esp.getChipId12());
-  Serial.print("Chip ID 32 bit: "); Serial.println(esp.getChipId());
-  Serial.print("Chip ID 16 bit: "); Serial.println(esp.getChipId3());
-  Serial.print("Chip ID 8 bit: "); Serial.println(esp.getChipId2());
-  
-	delay(3000);
+  // put your main code here, to run repeatedly:
 }
