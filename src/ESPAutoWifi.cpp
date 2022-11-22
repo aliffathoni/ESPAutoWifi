@@ -1,8 +1,15 @@
 #include <ESPAutoWifi.h>
+#include "Arduino.h"
 
-#include <WiFi.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+#ifdef ESP32
+    #include <WiFi.h>
+    #include <AsyncTCP.h>
+#elif defined(ESP8266)
+    #include <ESP8266WiFi.h>
+    #include <ESPAsyncTCP.h>
+#else
+#error Platform not supported
+#endif
 
 #include <Preferences.h>
 
@@ -12,11 +19,12 @@ AsyncWebServer server(80);
 
 Preferences preferences;
 
-ESPAutoWifi::ESPAutoWifi(){}
+String _ssid;
+String _password;
 
-String  ssid,
-        password,
-        ap_ssid;
+ESPAutoWifi::ESPAutoWifi(String ap){
+    _ap_ssid = ap;
+}
 
 void notFound(AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "Not found");
@@ -24,11 +32,11 @@ void notFound(AsyncWebServerRequest *request) {
 
 bool ESPAutoWifi::checkCredentials(){
     preferences.begin("credentials", false);
-    ssid =  preferences.getString("ssid", "");
-    password =  preferences.getString("password", "");
+    _ssid =  preferences.getString("ssid", "");
+    _password =  preferences.getString("password", "");
     preferences.end();
 
-    if((ssid!="") && (password!="")){
+    if((_ssid!="") && (_password!="")){
         return true;
     } else{
         return false;
@@ -41,6 +49,14 @@ bool ESPAutoWifi::checkConnection(){
     } else{
         return false;
     }
+}
+
+String ESPAutoWifi::getSSID(){
+    if(checkCredentials())  return _ssid;
+}
+
+String ESPAutoWifi::getPassword(){
+    if(checkCredentials())  return _password;
 }
 
 void ESPAutoWifi::reset(){
@@ -62,7 +78,7 @@ void ESPAutoWifi::autoConnect(){
 
 void ESPAutoWifi::startConfig(){
     WiFi.mode(WIFI_AP);
-    WiFi.softAP("ESP32", NULL);
+    WiFi.softAP(_ap_ssid.c_str(), NULL);
 
     IPAddress IP = WiFi.softAPIP();
     Serial.print("AP IP address: ");
@@ -77,18 +93,18 @@ void ESPAutoWifi::startConfig(){
     server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
       // GET input1 value on <ESP_IP>/get?input1=<inputMessage>
       if (request->hasParam("username")) {
-        ssid = request->getParam("username")->value();
+        _ssid = request->getParam("username")->value();
       }
       // GET input2 value on <ESP_IP>/get?input2=<inputMessage>
       if (request->hasParam("password")) {
-        password = request->getParam("password")->value();
+        _password = request->getParam("password")->value();
       }
       preferences.begin("credentials",false);
-      preferences.putString("ssid", ssid);
-      preferences.putString("password", password);
+      preferences.putString("ssid", _ssid);
+      preferences.putString("password", _password);
       preferences.end();
-      Serial.println(ssid);
-      request->send(200, "text/html", "Saving wifi to " + ssid + "<br><a href=\"/\">Return to Home Page</a>");
+      Serial.println(_ssid);
+      request->send(200, "text/html", "Saving wifi to " + _ssid + "<br><a href=\"/\">Return to Home Page</a>");
     });
     server.onNotFound(notFound);
     server.begin();
@@ -98,7 +114,7 @@ void ESPAutoWifi::connect(){
     if(checkCredentials()){
         server.end();
         WiFi.mode(WIFI_STA);
-        WiFi.begin(ssid.c_str(), password.c_str());
+        WiFi.begin(_ssid.c_str(), _password.c_str());
         if (WiFi.waitForConnectResult() != WL_CONNECTED) {
             Serial.println("WiFi Failed!");
             preferences.clear();
