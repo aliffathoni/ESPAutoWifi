@@ -1,35 +1,33 @@
-// Copyright 2015-2016 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 #ifndef _PREFERENCES_H_
 #define _PREFERENCES_H_
 
-#include "Arduino.h"
+#if defined(PARTICLE)
+#  include "Particle.h"
+#elif defined(ARDUINO)
+#  include "Arduino.h"
+#endif
+
+#include <math.h>
 
 typedef enum {
     PT_I8, PT_U8, PT_I16, PT_U16, PT_I32, PT_U32, PT_I64, PT_U64, PT_STR, PT_BLOB, PT_INVALID
 } PreferenceType;
 
-class Preferences {
+class Preferences
+{
+    typedef float float_t;
+    typedef double double_t;
+
     protected:
-        uint32_t _handle;
+        String _path;
         bool _started;
         bool _readOnly;
     public:
         Preferences();
         ~Preferences();
 
-        bool begin(const char * name, bool readOnly=false, const char* partition_label=NULL);
+        bool begin(const char * name, bool readOnly=false);
         void end();
 
         bool clear();
@@ -50,7 +48,7 @@ class Preferences {
         size_t putBool(const char* key, bool value);
         size_t putString(const char* key, const char* value);
         size_t putString(const char* key, String value);
-        size_t putBytes(const char* key, const void* value, size_t len);
+        size_t putBytes(const char* key, const void* buf, size_t len);
 
         bool isKey(const char* key);
         PreferenceType getType(const char* key);
