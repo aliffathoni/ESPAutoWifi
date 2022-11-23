@@ -16,7 +16,7 @@ class ESPAutoWifi {
         String getSSID();
         String getPassword();
     private:
-        String _ap_ssid = "ESP32";
+        String _ap_ssid;
 };
 
 #endif

@@ -1,21 +1,18 @@
 #include <ESPAutoWifi.h>
 #include "Arduino.h"
 
-#ifdef ESP32
-    #include <WiFi.h>
-    #include <AsyncTCP.h>
-#elif defined(ESP8266)
-    #include <ESP8266WiFi.h>
-    #include <ESPAsyncTCP.h>
-#else
-#error Platform not supported
-#endif
-
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 #include <Preferences.h>
 
 #include <web.h>
 
 AsyncWebServer server(80);
+IPAddress IP_Address(192, 168, 4, 1);
+IPAddress Gateway(192, 168, 1, 111);
+IPAddress Subnet(255, 255, 255, 0);
+IPAddress DNS(8, 8, 8, 8);
 
 Preferences preferences;
 
@@ -78,6 +75,7 @@ void ESPAutoWifi::autoConnect(){
 
 void ESPAutoWifi::startConfig(){
     WiFi.mode(WIFI_AP);
+    WiFi.softAPConfig(IP_Address, Gateway, Subnet, DNS);
     WiFi.softAP(_ap_ssid.c_str(), NULL);
 
     IPAddress IP = WiFi.softAPIP();
