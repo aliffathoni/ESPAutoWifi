@@ -1,5 +1,3 @@
-
-
 #include <ESPAutoWifi.h>
 
 //instantiate wifi class
@@ -18,11 +16,14 @@ void setup() {
   //starting autoconnect wifi system
   wf.autoConnect();
 
-  while(!wf.checkConnection()){
+  while(wf.checkConnection()){
     Serial.println("Please connect to "+wf.getAPSSID());
     Serial.println("And proceed to "+wf.getAPIP()+"on your browser\n");
     delay(1000);
   }
+
+  Serial.print("Connected with ");
+  Serial.println(wf.getIP());
 }
 
 void loop() {

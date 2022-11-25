@@ -75,6 +75,11 @@ String ESPAutoWifi::getAPPassword(){
     return _ap_password;
 }
 
+String ESPAutoWifi::getIP(){
+  IPAddress IP = WiFi.localIP();
+  return String(IP[0])+"."+String(IP[1])+"."+String(IP[2])+"."+String(IP[3]);
+}
+
 void ESPAutoWifi::reset(){
     preferences.begin("credentials", false);
     preferences.clear();

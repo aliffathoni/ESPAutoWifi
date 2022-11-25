@@ -106,7 +106,13 @@ class ESPAutoWifi {
             @return ESP saved AP Password
         */
         String getAPPassword();
-    
+
+        /*!
+            @brief  Get ESP IP Address
+            @return ESP IP Address
+        */
+        String getIP();
+
     private:
         String _ap_ssid;
         String _ap_password;
