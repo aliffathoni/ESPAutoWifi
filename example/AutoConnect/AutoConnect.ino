@@ -1,6 +1,6 @@
 #include <ESPAutoWifi.h>
 
-ESPAutoWifi wf("ESP_Server");
+ESPAutoWifi wf;
 
 void setup() {
   // put your setup code here, to run once:
