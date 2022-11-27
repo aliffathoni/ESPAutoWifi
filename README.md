@@ -3,13 +3,15 @@
 ESP Auto Connect Wifi without hardcode. As for now this code only works on ESP32 architecture, but i will update it soon on ESP8266.
 
 ## Dependencies
-Make sure to download and install these library on your Arduino IDE to ESPAutoWifi
+
+Make sure to download and install these library on your Arduino IDE before using ESPAutoWifi. You can download and install via link below since it doesn't included on Arduino Library Manager.
 
  - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
  - [AsyncTCP](https://github.com/me-no-dev/AsyncTCP)
 
 
 ## Simple shortest code
+
 You can use this code to use the main feature of this library.
 
 ```
@@ -26,7 +28,7 @@ You can use this code to use the main feature of this library.
   }
 ```
 
-If there is no saved network on your ESP then open your WiFi using other device(s) and connect to "ESP WiFi Portal" wifi, then type 192.168.4.1 on your browser to access the web portal.
+It will automatically connect on last saved WiFi network, and if there is no saved network on your ESP then open your WiFi using other device(s) and connect to "ESP WiFi Portal" wifi, then type 192.168.4.1 on your browser to access the web portal.
 
 ## License
 
