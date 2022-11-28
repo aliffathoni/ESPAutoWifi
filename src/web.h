@@ -64,7 +64,7 @@ button:hover {
             <input type="password" placeholder="Enter Password" name="password" required>
             <button type="submit">Connect</button>
             <!-- <button type="button" class="cancelbtn"> Cancel</button> -->
-            <div style="text-align: center;"> Show saved <a href="#"> password</a> </div>
+            <!-- <div style="text-align: center;"> Show saved <a href="#"> password</a> </div> -->
         </div>
     </form>
 </body>

@@ -91,15 +91,17 @@ void ESPAutoWifi::autoConnect(){
         startAP();
         startConfig();
     }
-    while(checkCredentials() != true){
-        //do nothing
+    while(!checkCredentials()){
+        Serial.println("Please connect to "+getAPSSID());
+        Serial.println("And proceed to "+getAPIP()+" on your browser\n");
+        vTaskDelay(2500);
     }
     connect();
 }
 
 void ESPAutoWifi::startAP(){
     WiFi.mode(WIFI_AP);
-    WiFi.softAPConfig(IP_Address, Gateway, Subnet, DNS);
+    WiFi.softAPConfig(IP_Address, Gateway, IPAddress(255, 255, 255, 0));
     if(_ap_password == ""){
         WiFi.softAP(_ap_ssid.c_str(), NULL);
     } else{
@@ -109,7 +111,7 @@ void ESPAutoWifi::startAP(){
 
 String ESPAutoWifi::getAPIP(){
     IPAddress APIP = WiFi.softAPIP();
-    return String(APIP);
+    return String(APIP[0])+"."+String(APIP[1])+"."+String(APIP[2])+"."+String(APIP[3]);
 }
 
 void ESPAutoWifi::startConfig(){
@@ -146,6 +148,6 @@ void ESPAutoWifi::connect(){
         }
     } else{
         Serial.println("Please Input Credentials!");
-        startConfig();
+        autoConnect();
     }
 }
